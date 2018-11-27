@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Data</title>
+    <link rel="stylesheet" href="node_modules/open-weather-icons/dist/css/open-weather-icons.css">
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="javascript/module.js"></script>
+    <script src="javascript/controller.js"></script>
+    <style>
+        .owi
+        {
+            width: 100px !important;
+            height: 200px !important;
+        }
+    </style>
+</head>
+<body ng-app="weatherapp" ng-controller="weatherapp_controller">
+    <div>
+        <form action="">
+            <select ng-model="city" ng-change="getDataSet()">
+               <option value="">--Select--</option>
+                <option ng-repeat="elements in cities" value="{{elements}}">{{elements.name}}</option>
+            </select>
+            <select ng-model="units" ng-change="getDataSet()">
+                <option value="imperial">Fahrenheit</option>
+                <option value="metric">Celsius</option>
+            </select>
+        </form>
+    </div>
+    <div>
+       <i class="owi owi-{{weather.weather[0].icon}}" style="font-size: 100px"></i>
+        <table>
+            <tr>
+                <td>Temperature : {{weather.main.temp}}</td>
+            </tr>
+            <tr>
+                <td>Min Temperature : {{weather.main.temp_min}}</td>
+                <td>Max Temperature : {{weather.main.temp_max}}</td>
+            </tr>
+            <tr>
+                <td>Wind : {{weather.wind.speed}} m/s</td>
+            </tr>
+            <tr>
+                <td>Other Details</td>
+            </tr>
+            <tr>
+                <td>Lon : {{weather.coord.lon}}</td>
+            </tr>
+            <tr>
+                <td>Lat : {{weather.coord.lat}}</td>
+            </tr>
+            <tr>
+                <td>Weather Description : {{weather.weather[0].description}}</td>
+            </tr>
+            <tr>
+                <td>Humidity : {{weather.main.humidity}}</td>
+            </tr>
+            <tr>
+                <td>Pressure : {{weather.main.pressure}}</td>
+            </tr>
+            <tr>
+                <td>Ground Level : {{weather.main.sea_level}}</td>
+            </tr>
+            <tr>
+                <td>Sea Level : {{weather.main.grnd_level}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
