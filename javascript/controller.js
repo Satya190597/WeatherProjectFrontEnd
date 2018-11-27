@@ -1,8 +1,11 @@
 app.controller("weatherapp_controller",function($scope,$http){
     
-    // Defining variables
+    // Defining unit imperial = Fahrenheit And metric = Celsius
     $scope.units = "imperial";
-    // Load the data
+    
+    /*
+        Loading data
+    */
     var url = "http://localhost:8080/city";
     $http.get(url).then(function(response){
         $scope.cities = response.data;
@@ -10,6 +13,9 @@ app.controller("weatherapp_controller",function($scope,$http){
         
     });
     
+    /*
+        Getting data set from openweather API according to city and units
+    */
     $scope.getDataSet = function()
     {
         console.log($scope.city);
@@ -21,4 +27,5 @@ app.controller("weatherapp_controller",function($scope,$http){
             
         });
     }
+    
 });
