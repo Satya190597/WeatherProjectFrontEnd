@@ -4,64 +4,133 @@
     <meta charset="UTF-8">
     <title>Get Data</title>
     <link rel="stylesheet" href="node_modules/open-weather-icons/dist/css/open-weather-icons.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="node_modules/jquery/dist/jquery.js">
+    </script>
+    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="node_modules/angular/angular.js"></script>
     <script src="javascript/module.js"></script>
     <script src="javascript/controller.js"></script>
 </head>
-<body ng-app="weatherapp" ng-controller="weatherapp_controller">
-    <div>
-        <form action="">
-            <select ng-model="city" ng-change="getDataSet()">
-               <option value="">--Select--</option>
-                <option ng-repeat="elements in cities" value="{{elements}}">{{elements.name}}</option>
-            </select>
-            <select ng-model="units" ng-change="getDataSet()">
-                <option value="imperial">Fahrenheit</option>
-                <option value="metric">Celsius</option>
-            </select>
-        </form>
-    </div>
-    <div>
-       <i class="owi owi-{{weather.weather[0].icon}}" style="font-size: 100px"></i>
-        <table>
-            <tr>
-                <td>Temperature : {{weather.main.temp}}</td>
-            </tr>
-            <tr>
-                <td>Min Temperature : {{weather.main.temp_min}}</td>
-                <td>Max Temperature : {{weather.main.temp_max}}</td>
-            </tr>
-            <tr>
-                <td>Wind : {{weather.wind.speed}} m/s</td>
-            </tr>
-            <tr>
-                <td>Other Details</td>
-            </tr>
-            <tr>
-                <td>Lon : {{weather.coord.lon}}</td>
-            </tr>
-            <tr>
-                <td>Lat : {{weather.coord.lat}}</td>
-            </tr>
-            <tr>
-                <td>Weather Description : {{weather.weather[0].description}}</td>
-            </tr>
-            <tr>
-                <td>Humidity : {{weather.main.humidity}}</td>
-            </tr>
-            <tr>
-                <td>Pressure : {{weather.main.pressure}}</td>
-            </tr>
-            <tr>
-                <td>Ground Level : {{weather.main.sea_level}}</td>
-            </tr>
-            <tr>
-                <td>Sea Level : {{weather.main.grnd_level}}</td>
-            </tr>
-            <tr>
-                <td><button ng-click="postData()">Add</button></td>
-            </tr>
-        </table>
-    </div>
+<body ng-app="weatherapp">
+    <section class="row">
+        <section class="col">
+            <section ng-controller="weatherapp_controller">
+                <div>
+                    <form action="">
+                        <select ng-model="city" ng-change="getDataSet()">
+                           <option value="">--Select--</option>
+                            <option ng-repeat="elements in cities" value="{{elements}}">{{elements.name}}</option>
+                        </select>
+                        <select ng-model="units" ng-change="getDataSet()">
+                            <option value="imperial">Fahrenheit</option>
+                            <option value="metric">Celsius</option>
+                        </select>
+                    </form>
+                </div>
+                <div>
+                   <i class="owi owi-{{weather.weather[0].icon}}" style="font-size: 100px"></i>
+                    <table>
+                        <tr>
+                            <td>Temperature : {{weather.main.temp}}</td>
+                        </tr>
+                        <tr>
+                            <td>Min Temperature : {{weather.main.temp_min}}</td>
+                            <td>Max Temperature : {{weather.main.temp_max}}</td>
+                        </tr>
+                        <tr>
+                            <td>Wind : {{weather.wind.speed}} m/s</td>
+                        </tr>
+                        <tr>
+                            <td>Other Details</td>
+                        </tr>
+                        <tr>
+                            <td>Lon : {{weather.coord.lon}}</td>
+                        </tr>
+                        <tr>
+                            <td>Lat : {{weather.coord.lat}}</td>
+                        </tr>
+                        <tr>
+                            <td>Weather Description : {{weather.weather[0].description}}</td>
+                        </tr>
+                        <tr>
+                            <td>Humidity : {{weather.main.humidity}}</td>
+                        </tr>
+                        <tr>
+                            <td>Pressure : {{weather.main.pressure}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ground Level : {{weather.main.sea_level}}</td>
+                        </tr>
+                        <tr>
+                            <td>Sea Level : {{weather.main.grnd_level}}</td>
+                        </tr>
+                        <tr>
+                            <td><button ng-click="postData()">Add</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </section>
+    <section class="row">
+        <section class="col">
+            <section ng-controller="weatherapp-all-report">
+                <table class="table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>City</th>
+                            <th>Description</th>
+                            <th>Humidity</th>
+                            <th>Pressure</th>
+                            <th>Speed</th>
+                            <th>Temp</th>
+                            <th>Temp Max</th>
+                            <th>Temp Min</th>
+                            <th>Created AT</th>
+                        </tr>
+                    </thead>
+                    <tr ng-repeat="weather in weathers">
+                        <td>{{weather.city.name}}</td>
+                        <td>{{weather.description}}</td>
+                        <td>{{weather.humidity}}</td>
+                        <td>{{weather.pressure}}</td>
+                        <td>{{weather.speed}}</td>
+                        <td>{{weather.temp}}</td>
+                        <td>{{weather.temp_max}}</td>
+                        <td>{{weather.temp_min}}</td>
+                        <td>{{weather.created_at}}</td>
+                    </tr>
+                </table>
+            </section>
+        </section>
+        <section class="col">
+            <section ng-controller="weatherapp_report_controller">
+                <select ng-model="report_type" ng-change="getData()">
+                   <option value="">-- Select --</option>
+                    <option value="temp_max">Maximum Temperature</option>
+                    <option value="temp_min">Minimum Temperature</option>
+                    <option value="temp">Temperature</option>
+                    <option value="humidity">Humidity</option>
+                    <option value="pressure">Pressure</option>
+                </select>
+                {{report_type}}
+                <table ng-hide="report_type!='temp'">
+                    <tr>
+                       <td ng-repeat="elements in weathers" >{{elements.temp_max}}</td> 
+                    </tr>
+                </table>
+            </section>
+        </section>
+    </section>
+    <section class="row">
+        <section class="col">
+            <section ng-controller="weatherapp_chart_controller">
+                <h3>Temperature</h3>
+                <canvas width="100%"></canvas>
+            </section>
+        </section>
+    </section>
 </body>
 </html>

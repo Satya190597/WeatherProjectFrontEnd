@@ -27,6 +27,7 @@ app.controller("weatherapp_controller",function($scope,$http){
             
         });
     }
+    
     /*
         Posting the data set
     */
@@ -48,9 +49,38 @@ app.controller("weatherapp_controller",function($scope,$http){
         var url = "http://localhost:8080/weather/create";
         $http.post(url,weather).then(function(response){
             console.log(response.data);
+            if(response.data.id == null)
+                alert("You Have Already Added Todays Data ...");
         },function(error){
             
         });
     }
     
+});
+app.controller("weatherapp-all-report",function($scope,$http){
+    $scope.weather = {};
+    $http.get("http://localhost:8080/weather/").then(function(response){
+        $scope.weathers = response.data;
+        console.log($scope.weathers);
+    },function(data){
+        
+    })
+});
+app.controller("weatherapp_report_controller",function($scope,$http){
+    $scope.weathers = {};
+    $http.get("http://localhost:8080/weather/").then(function(response){
+        $scope.weathers = response.data;
+        
+        console.log($scope.weathers);
+    },function(data){
+        
+    })
+    $scope.temp = [];
+    $scope.getData = function(){
+        angular.forEach($scope.weathers,function(value){
+            console.log(value);
+            $scope.temp.push(value.temp);
+        });
+        console.log($scope.temp);
+    }
 });
