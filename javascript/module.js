@@ -1,1 +1,1 @@
-var app = angular.module("weatherapp",[]);
+var app = angular.module("weatherapp",["chart.js"]);

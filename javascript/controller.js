@@ -84,3 +84,31 @@ app.controller("weatherapp_report_controller",function($scope,$http){
         console.log($scope.temp);
     }
 });
+app.controller("weatherapp_chart_controller",function($scope,$http,chart_service){
+    $scope.weathers = {};
+    $scope.wind_speed = [];
+    $scope.humidity = [];
+    $scope.temp_max_min_data = [];
+    $scope.temp_max = [];
+    $scope.temp_min = [];
+    $scope.temp = [];
+    $scope.label = [];
+    $scope.series = ['Temp'];
+    $scope.temp_max_min_series = ['Max Temperature','Min Temperature'];
+    $scope.series_humidity = ['Humidity'];
+    $scope.series_wind = ['Wind'];
+    var weathers = chart_service.getWeatherById(1);
+    weathers.then(function(data){
+        console.log(data);
+        angular.forEach(data,function(value){
+            $scope.temp.push(value.temp);
+            $scope.label.push(value.created_at);
+            $scope.temp_max.push(value.temp_max);
+            $scope.temp_min.push(value.temp_min);
+            $scope.wind_speed.push(value.speed);
+            $scope.humidity.push(value.pressure);
+        });
+    });
+    $scope.temp_max_min_data.push($scope.temp_max);
+    $scope.temp_max_min_data.push($scope.temp_min);
+});

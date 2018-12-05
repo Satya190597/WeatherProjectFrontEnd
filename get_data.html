@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
     <script src="node_modules/jquery/dist/jquery.js">
     </script>
-    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="javascript/module.js"></script>
+    <script src="javascript/service.js"></script>
     <script src="javascript/controller.js"></script>
 </head>
 <body ng-app="weatherapp">
@@ -124,11 +126,35 @@
             </section>
         </section>
     </section>
-    <section class="row">
-        <section class="col">
-            <section ng-controller="weatherapp_chart_controller">
-                <h3>Temperature</h3>
-                <canvas width="100%"></canvas>
+    <section ng-controller="weatherapp_chart_controller">
+        <section class="row">
+            <!--  TEMPERATURE CHART -->
+            <section class="col">
+                <section>
+                    <h3>Temperature</h3>
+                    <canvas chart-data="temp" chart-labels="label" chart-series="series" id="bar_temp" class="chart chart-bar"></canvas>
+                </section>
+            </section>
+            <section class="col">
+                <section>
+                    <h3>Max Temperature Vs Min Temperature</h3>
+                    <canvas chart-data="temp_max_min_data" chart-labels="label" chart-series="temp_max_min_series" id="line_max_min" class="chart chart-line"></canvas>
+                </section>
+            </section>
+        </section>
+        <section class="row">
+            <!--  TEMPERATURE CHART -->
+            <section class="col">
+                <section>
+                    <h3>Humidity</h3>
+                    <canvas chart-data="humidity" chart-labels="label" chart-series="series_humidity" id="bar_humidity" class="chart chart-bar"></canvas>
+                </section>
+            </section>
+            <section class="col">
+                <section>
+                    <h3>Wind Speed</h3>
+                    <canvas chart-data="wind_speed" chart-labels="label" chart-series="series_wind" id="line_wind" class="chart chart-bar"></canvas>
+                </section>
             </section>
         </section>
     </section>
