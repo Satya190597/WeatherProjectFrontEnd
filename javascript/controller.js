@@ -3,13 +3,17 @@
 *   LOGIN CONTROLLER
 *   1. Set rootscope 2. Navigate to dashboard 3 Used HTTP header for authentication
 */
-app.controller('login_controller',function($scope,$http,$state,$rootScope){
+app.controller('login_controller',function($scope,$http,$state,$rootScope,$window){
     $scope.login = function(){
         var headers = {headers:{ 'Authorization':  'Basic ' + btoa($scope.email + ':' + $scope.password)}};
+        console.log(headers+" "+$scope.email+" "+$scope.password);
         $http.get("http://localhost:8080/current_user",headers).then(function(response){
             if(response.data.email == $scope.email && response.data.password == $scope.password)
             {
-                $rootScope.email = $scope.email;$rootScope.password = $scope.password;$state.go('login_data');
+                $window.localStorage.setItem("user_email",response.data.email);
+                $window.localStorage.setItem("user_password",response.data.password);
+                $window.localStorage.setItem("user_id",response.data.id);
+                $rootScope.user_id = response.data.id;$state.go('login_data');
             }
             else
             {
@@ -23,35 +27,38 @@ app.controller('login_controller',function($scope,$http,$state,$rootScope){
 });
 /*
 *   ---------------------------------------------------------------------------------------------------------------
+*   LOGOUT CONTROLLER
+*   1. Logout current user  2. Check validity of current user
+*/
+app.controller("logout_controller",function($scope,$state,$window){
+    $scope.logout = function(){
+        $window.localStorage.removeItem("user_email");
+        $window.localStorage.removeItem("user_password");
+        $scope.validity();
+    }
+    $scope.validity = function()
+    {
+        if($window.localStorage.getItem("user_email") == undefined || $window.localStorage.getItem("user_password") == undefined)
+            $state.go('login');
+    }
+    $scope.validity();
+})
+/*
+*   ---------------------------------------------------------------------------------------------------------------
 *   WEATHER APP CONTROLLER
 */
-app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state){
-    
-    $scope.logout = function(){
-    
-    $scope.email = '';
-    $scope.password  = '';
-        $state.go('login');
-    }
-    
+app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state,$window){
     // Defining unit imperial = Fahrenheit And metric = Celsius
     $scope.units = "imperial";
-    
-    /*
-        Loading data
-    */
+    // Getting list of cities
+    var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
     var url = "http://localhost:8080/city";
-    $http.get(url,{
-            headers:{ 'Authorization':  'Basic ' + btoa($scope.email + ':' + $scope.password)}
-            }).then(function(response){
+    $http.get(url,headers).then(function(response){
         $scope.cities = response.data;
     },function(error){
         
     });
-    
-    /*
-        Getting data set from openweather API according to city and units
-    */
+    //  Getting data set from openweather API according to city and units
     $scope.getDataSet = function()
     {
         console.log($scope.city);
@@ -63,14 +70,12 @@ app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state){
             
         });
     }
-    
-    /*
-        Posting the data set
-    */
+    //  Posting the data set
     $scope.postData = function()
     {
         var weather = {};
         weather.city = {};
+        weather.user = {};
         weather.humidity = $scope.weather.main.humidity;
         weather.pressure = $scope.weather.main.pressure;
         weather.temp = $scope.weather.main.temp;
@@ -82,57 +87,57 @@ app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state){
         weather.icon = $scope.weather.weather[0].icon;
         weather.description = $scope.weather.weather[0].description;
         weather.unit = $scope.units;
+        weather.user.id = $scope.user_id;
         var url = "http://localhost:8080/weather/create";
         $http.post(url,weather).then(function(response){
-            console.log(response.data);
             if(response.data.id == null)
+            {
                 alert("You Have Already Added Todays Data ...");
+            }
+            else
+            {
+                alert("Data Added Successfully");
+            }
         },function(error){
             
         });
     }
     
 });
-app.controller("weatherapp-all-report",function($scope,$http,$rootScope){
+app.controller("weatherapp-all-report",function($scope,$http,$rootScope,$window){
     $scope.weather = {};
-    $http.get("http://localhost:8080/weather/",{
-            headers:{ 'Authorization':  'Basic ' + ($scope.email + ':' + $scope.password)}
-            }).then(function(response){
-        $scope.weathers = response.data;
-        console.log($scope.weathers);
-    },function(data){
-        
-    })
+    $rootScope.getRepositoryRecords = function(){
+        var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
+        $http.get("http://localhost:8080/weather/",headers).then(function(response){
+            $scope.weathers = response.data;
+            console.log($scope.weathers);
+        },function(data){
+
+        })
+    }
+    $scope.getRepositoryRecords();
 });
 /*
 ----------------------- WEATHER REPORT CONTROLLER --------------------------------
 */
-app.controller("weatherapp_report_controller",function($scope,$http,$rootScope){
+app.controller("weatherapp_report_controller",function($scope,$http,$rootScope,$window){
     console.log("Login Flag : "+$scope.flag);
     $scope.weathers = {};
-    $http.get("http://localhost:8080/weather/",{
-            headers:{ 'Authorization':  'Basic ' + ($scope.email + ':' + $scope.password)}
-            }).then(function(response){
-        $scope.weathers = response.data;
-        
-        console.log($scope.weathers);
-    },function(data){
-        
-    })
-    $scope.temp = [];
-    $scope.getData = function(){
-        angular.forEach($scope.weathers,function(value){
-            console.log(value);
-            $scope.temp.push(value.temp);
-        });
-        console.log($scope.temp);
+    $scope.getRepositoryRecords = function(){
+        var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
+        $http.get("http://localhost:8080/weather/",headers).then(function(response){
+            $scope.weathers = response.data;
+        },function(data){
+
+        })
     }
+    $scope.getRepositoryRecords();
 });
 /*
 -------------------------------- CHART CONTROLLER --------------------------------
 */
-app.controller("weatherapp_chart_controller",function($scope,$http,chart_service){
-    $scope.headers = {headers:{ 'Authorization':  'Basic ' + ($scope.email + ':' + $scope.password)}};
+app.controller("weatherapp_chart_controller",function($scope,$http,chart_service,$window){
+    $scope.headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
     $scope.weathers = {};
     $scope.wind_speed = [];
     $scope.humidity = [];
@@ -145,7 +150,7 @@ app.controller("weatherapp_chart_controller",function($scope,$http,chart_service
     $scope.temp_max_min_series = ['Max Temperature','Min Temperature'];
     $scope.series_humidity = ['Humidity'];
     $scope.series_wind = ['Wind'];
-    var weathers = chart_service.getWeatherById(1,$scope.email,$scope.password);
+    var weathers = chart_service.getWeatherById(1,$window.localStorage.getItem("user_email"),$window.localStorage.getItem("user_password"));
     weathers.then(function(data){
         console.log(data);
         angular.forEach(data,function(value){

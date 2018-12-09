@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Weather Repository</title>
-    <!-- Including Style Sheets -->
+    <title>Get Data</title>
     <link rel="stylesheet" href="node_modules/open-weather-icons/dist/css/open-weather-icons.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="stylesheet/login.css">
-    <!-- Including Javascript Files -->
-    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js">
+    </script>
     <script src="node_modules/angular/angular.js"></script>
-    <script src="https://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+    <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="node_modules/chart.js/dist/Chart.min.js"></script>
     <script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="javascript/module.js"></script>
-    <script src="javascript/config.js"></script>    
     <script src="javascript/service.js"></script>
     <script src="javascript/controller.js"></script>
 </head>
-<body ng-app="weatherapp">
-        <a ui-sref="login">Login</a>
-        <section ui-view></section>
-</body>
-</html>

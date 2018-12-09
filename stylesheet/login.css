@@ -1,0 +1,15 @@
+.login-wrapper
+{
+    width: 100%;
+    display: flex;
+}
+.login-card-header
+{
+    font-weight: bold;
+    color: white;
+}
+.login-card
+{
+    width: 40%;
+    display: flex;
+}
