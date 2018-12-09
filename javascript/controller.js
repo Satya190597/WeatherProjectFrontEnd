@@ -106,11 +106,20 @@ app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state,$
 });
 app.controller("weatherapp-all-report",function($scope,$http,$rootScope,$window){
     $scope.weather = {};
-    $rootScope.getRepositoryRecords = function(){
+    $scope.getRepositoryRecords = function(){
         var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
         $http.get("http://localhost:8080/weather/",headers).then(function(response){
             $scope.weathers = response.data;
             console.log($scope.weathers);
+        },function(data){
+
+        })
+    }
+    $scope.deleteRecord = function(id){
+        console.log(id);
+        var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
+        $http.delete("http://localhost:8080/weather/"+id,headers).then(function(response){
+            $scope.getRepositoryRecords();
         },function(data){
 
         })

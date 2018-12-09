@@ -107,7 +107,7 @@
                             <td>{{weather.temp_max}}</td>
                             <td>{{weather.temp_min}}</td>
                             <td>{{weather.created_at}}</td>
-                            <td><button class="btn btn-danger">Delete</button></td>
+                            <td><button class="btn btn-danger" ng-click="deleteRecord(weather.id);">Delete</button></td>
                         </tr>
                     </table>
                 </div>
