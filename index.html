@@ -18,9 +18,14 @@
     <script src="javascript/config.js"></script>    
     <script src="javascript/service.js"></script>
     <script src="javascript/controller.js"></script>
+    <script>
+        app.controller('index',function($state){
+            console.log('Working');
+            $state.go('login');
+        })
+    </script>
 </head>
-<body ng-app="weatherapp">
-        <a ui-sref="login">Login</a>
-        <section ui-view></section>
+<body ng-app="weatherapp" ng-controller="index" style="height: 100%">
+    <section ui-view style="width:100%"></section>
 </body>
 </html>

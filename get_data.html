@@ -1,9 +1,14 @@
 
-<nav ng-controller="logout_controller" class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-end">
-    <button ng-click="logout()" class="btn btn-danger">Logout</button>
+<nav ng-controller="logout_controller" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="col-3">
+        <strong style="float: left;display: block;color: white">CUTM Weather Repository</strong>
+    </div>
+    <div class="col-9">
+        <button ng-click="logout()" class="btn btn-danger" style="float:right">Logout</button>
+    </div>
 </nav>
 <section class="row">
-    <section class="col" style="padding-top: 1rem;padding-left: 2rem">
+    <section class="col" style="padding-top: 1rem;padding-left: 2rem;padding-right: 2rem">
         <section ng-controller="weatherapp_controller">
             <div class="card text-white bg-dark">
                 <div class="card-header">
@@ -70,8 +75,15 @@
             </div>
         </section>
     </section>
-    <section class="col">
-        
+    <section class="col" style="padding-top: 1rem;padding-left: 2rem;padding-right: 2rem">
+        <div class="card bg-warning">
+            <div class="card-header">
+                <strong>Work On Progress</strong>
+            </div>
+            <div class="card-body">
+                <h1>Work On Progress</h1>
+            </div>
+        </div>
     </section>
 </section>
 <section class="row">
@@ -114,30 +126,21 @@
             </div>
         </section>
     </section>
-    <section class="col">
-        <section ng-controller="weatherapp_report_controller">
-            <select ng-model="report_type" ng-change="getData()">
-               <option value="">-- Select --</option>
-                <option value="temp_max">Maximum Temperature</option>
-                <option value="temp_min">Minimum Temperature</option>
-                <option value="temp">Temperature</option>
-                <option value="humidity">Humidity</option>
-                <option value="pressure">Pressure</option>
-            </select>
-            {{report_type}}
-            <table ng-hide="report_type!='temp'">
-                <tr>
-                   <td ng-repeat="elements in weathers" >{{elements.temp_max}}</td> 
-                </tr>
-            </table>
-        </section>
-    </section>
 </section>
 <section ng-controller="weatherapp_chart_controller">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style="margin-top: 1rem;margin-left: 2rem;margin-right: 2rem">
+        <div class="form-group" style="width:100%">
+            <label><strong style="color:white">Select City</strong></label>
+            <select ng-model="city" ng-change="citySelected()" class="form-control" style="font-weight: bold">
+                <option value="">--Select--</option>
+                <option ng-repeat="elements in cities" value="{{elements}}">{{elements.name}}</option>
+            </select>
+        </div>
+    </nav>
     <section class="row">
         <!--  TEMPERATURE CHART -->
         <section class="col">
-            <section style="padding-top: 1rem;padding-left: 2rem">
+            <section style="padding-top: 1rem;padding-left: 2rem;">
                 <div class="card bg-default">
                     <div class="card-header bg-info">
                         <h3 class="text-white">Temperature</h3>
@@ -150,12 +153,12 @@
         </section>
         <section class="col">
             <section>
-                <section style="padding-top: 1rem;padding-left: 2rem">
+                <section style="padding-top: 1rem;padding-left: 2rem;padding-right: 2rem">
                     <div class="card bg-default">
                         <div class="card-header bg-info">
                             <h3 class="text-white">Max Temperature Vs Min Temperature</h3>
                         </div>
-                        <div>
+                        <div class="card-body">
                             <canvas chart-data="temp_max_min_data" chart-labels="label" chart-series="temp_max_min_series" id="line_max_min" class="chart chart-line" chart-options="{scales: {yAxes: [{ticks: {beginAtZero:true}}]}}"></canvas>
                         </div>
                     </div>
@@ -178,7 +181,7 @@
             </section>
         </section>
         <section class="col">
-            <section style="padding-top: 1rem;padding-left: 2rem">
+            <section style="padding-top: 1rem;padding-left: 2rem;padding-right: 2rem">
                 <div class="card bg-default">
                     <div class="card-header bg-info">
                         <h3 class="text-white">Wind Speed</h3>

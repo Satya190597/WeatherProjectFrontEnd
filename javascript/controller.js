@@ -104,7 +104,12 @@ app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state,$
     }
     
 });
-app.controller("weatherapp-all-report",function($scope,$http,$rootScope,$window){
+/*
+*   ---------------------------------------------------------------------------------------------------------------
+*   WEATHER RECORD TABLE CONTROLLER
+*   1. GET USER REPOSITORY RECORD   2. DELETE USER REPOSITORY RECORD
+*/
+app.controller("weatherapp-all-report",function($scope,$http,$window){
     $scope.weather = {};
     $scope.getRepositoryRecords = function(){
         var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
@@ -146,31 +151,46 @@ app.controller("weatherapp_report_controller",function($scope,$http,$rootScope,$
 -------------------------------- CHART CONTROLLER --------------------------------
 */
 app.controller("weatherapp_chart_controller",function($scope,$http,chart_service,$window){
-    $scope.headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
-    $scope.weathers = {};
-    $scope.wind_speed = [];
-    $scope.humidity = [];
-    $scope.temp_max_min_data = [];
-    $scope.temp_max = [];
-    $scope.temp_min = [];
-    $scope.temp = [];
-    $scope.label = [];
-    $scope.series = ['Temp'];
-    $scope.temp_max_min_series = ['Max Temperature','Min Temperature'];
-    $scope.series_humidity = ['Humidity'];
-    $scope.series_wind = ['Wind'];
-    var weathers = chart_service.getWeatherById(1,$window.localStorage.getItem("user_email"),$window.localStorage.getItem("user_password"));
-    weathers.then(function(data){
-        console.log(data);
-        angular.forEach(data,function(value){
-            $scope.temp.push(value.temp);
-            $scope.label.push(value.created_at);
-            $scope.temp_max.push(value.temp_max);
-            $scope.temp_min.push(value.temp_min);
-            $scope.wind_speed.push(value.speed);
-            $scope.humidity.push(value.pressure);
-        });
+    // GET CITY LIST
+    // Getting list of cities
+    var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
+    var url = "http://localhost:8080/city";
+    $http.get(url,headers).then(function(response){
+        $scope.cities = response.data;
+    },function(error){
+        
     });
-    $scope.temp_max_min_data.push($scope.temp_max);
-    $scope.temp_max_min_data.push($scope.temp_min);
+    //------------------------
+    $scope.headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
+    $scope.resetItems = function(){
+        $scope.weathers = {};
+        $scope.wind_speed = [];
+        $scope.humidity = [];
+        $scope.temp_max_min_data = [];
+        $scope.temp_max = [];
+        $scope.temp_min = [];
+        $scope.temp = [];
+        $scope.label = [];
+        $scope.series = ['Temp'];
+        $scope.temp_max_min_series = ['Max Temperature','Min Temperature'];
+        $scope.series_humidity = ['Humidity'];
+        $scope.series_wind = ['Wind'];
+    }
+    $scope.resetItems();
+    $scope.citySelected = function(){
+        var weathers = chart_service.getWeatherById(JSON.parse($scope.city).id,$window.localStorage.getItem("user_email"),$window.localStorage.getItem("user_password"));
+        weathers.then(function(data){
+            $scope.resetItems();
+            angular.forEach(data,function(value){
+                $scope.temp.push(value.temp);
+                $scope.label.push(value.created_at);
+                $scope.temp_max.push(value.temp_max);
+                $scope.temp_min.push(value.temp_min);
+                $scope.wind_speed.push(value.speed);
+                $scope.humidity.push(value.pressure);
+            });
+            $scope.temp_max_min_data.push($scope.temp_max);
+            $scope.temp_max_min_data.push($scope.temp_min);
+        }); 
+    }
 });
