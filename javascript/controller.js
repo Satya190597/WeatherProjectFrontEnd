@@ -1,4 +1,38 @@
-app.controller("weatherapp_controller",function($scope,$http){
+/*
+*   ---------------------------------------------------------------------------------------------------------------
+*   LOGIN CONTROLLER
+*   1. Set rootscope 2. Navigate to dashboard 3 Used HTTP header for authentication
+*/
+app.controller('login_controller',function($scope,$http,$state,$rootScope){
+    $scope.login = function(){
+        var headers = {headers:{ 'Authorization':  'Basic ' + btoa($scope.email + ':' + $scope.password)}};
+        $http.get("http://localhost:8080/current_user",headers).then(function(response){
+            if(response.data.email == $scope.email && response.data.password == $scope.password)
+            {
+                $rootScope.email = $scope.email;$rootScope.password = $scope.password;$state.go('login_data');
+            }
+            else
+            {
+                alert('Invalid Userid And Password');
+            }
+        },function(error){
+            if(error.status == -1)
+                alert('Invalid Userid And Password');
+        });
+    }
+});
+/*
+*   ---------------------------------------------------------------------------------------------------------------
+*   WEATHER APP CONTROLLER
+*/
+app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state){
+    
+    $scope.logout = function(){
+    
+    $scope.email = '';
+    $scope.password  = '';
+        $state.go('login');
+    }
     
     // Defining unit imperial = Fahrenheit And metric = Celsius
     $scope.units = "imperial";
@@ -7,7 +41,9 @@ app.controller("weatherapp_controller",function($scope,$http){
         Loading data
     */
     var url = "http://localhost:8080/city";
-    $http.get(url).then(function(response){
+    $http.get(url,{
+            headers:{ 'Authorization':  'Basic ' + btoa($scope.email + ':' + $scope.password)}
+            }).then(function(response){
         $scope.cities = response.data;
     },function(error){
         
@@ -57,18 +93,26 @@ app.controller("weatherapp_controller",function($scope,$http){
     }
     
 });
-app.controller("weatherapp-all-report",function($scope,$http){
+app.controller("weatherapp-all-report",function($scope,$http,$rootScope){
     $scope.weather = {};
-    $http.get("http://localhost:8080/weather/").then(function(response){
+    $http.get("http://localhost:8080/weather/",{
+            headers:{ 'Authorization':  'Basic ' + ($scope.email + ':' + $scope.password)}
+            }).then(function(response){
         $scope.weathers = response.data;
         console.log($scope.weathers);
     },function(data){
         
     })
 });
-app.controller("weatherapp_report_controller",function($scope,$http){
+/*
+----------------------- WEATHER REPORT CONTROLLER --------------------------------
+*/
+app.controller("weatherapp_report_controller",function($scope,$http,$rootScope){
+    console.log("Login Flag : "+$scope.flag);
     $scope.weathers = {};
-    $http.get("http://localhost:8080/weather/").then(function(response){
+    $http.get("http://localhost:8080/weather/",{
+            headers:{ 'Authorization':  'Basic ' + ($scope.email + ':' + $scope.password)}
+            }).then(function(response){
         $scope.weathers = response.data;
         
         console.log($scope.weathers);
@@ -84,7 +128,11 @@ app.controller("weatherapp_report_controller",function($scope,$http){
         console.log($scope.temp);
     }
 });
+/*
+-------------------------------- CHART CONTROLLER --------------------------------
+*/
 app.controller("weatherapp_chart_controller",function($scope,$http,chart_service){
+    $scope.headers = {headers:{ 'Authorization':  'Basic ' + ($scope.email + ':' + $scope.password)}};
     $scope.weathers = {};
     $scope.wind_speed = [];
     $scope.humidity = [];
@@ -97,7 +145,7 @@ app.controller("weatherapp_chart_controller",function($scope,$http,chart_service
     $scope.temp_max_min_series = ['Max Temperature','Min Temperature'];
     $scope.series_humidity = ['Humidity'];
     $scope.series_wind = ['Wind'];
-    var weathers = chart_service.getWeatherById(1);
+    var weathers = chart_service.getWeatherById(1,$scope.email,$scope.password);
     weathers.then(function(data){
         console.log(data);
         angular.forEach(data,function(value){
