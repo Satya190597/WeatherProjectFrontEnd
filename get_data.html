@@ -1,4 +1,5 @@
 
+<button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-fw fa-arrow-up"></i></button>
 <nav ng-controller="logout_controller" class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="col-3">
         <strong style="float: left;display: block;color: white">CUTM Weather Repository</strong>
@@ -75,13 +76,73 @@
             </div>
         </section>
     </section>
-    <section class="col" style="padding-top: 1rem;padding-left: 2rem;padding-right: 2rem">
+    <section class="col text-dark" style="padding-top: 1rem;padding-left: 2rem;padding-right: 2rem" ng-controller="userapp_controller">
         <div class="card bg-warning">
             <div class="card-header">
-                <strong>Work On Progress</strong>
+                <strong>Your Details</strong>
             </div>
             <div class="card-body">
-                <h1>Work On Progress</h1>
+                <form class="form">
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label><strong>First Name</strong></label>
+                        </div>
+                        <div class="col-9">
+                            <input type="text" class="form-control" ng-model="user_details.first_name"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label><strong>Last Name</strong></label>
+                        </div>
+                        <div class="col-9">
+                            <input type="text" class="form-control" ng-model="user_details.last_name"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label><strong>Email</strong></label>
+                        </div>
+                        <div class="col-9">
+                            <input type="text" class="form-control" ng-model="user_details.email"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label><strong>Gender</strong></label>
+                        </div>
+                        <div class="col-9">
+                            <input type="text" class="form-control" ng-model="user_details.gender"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label><strong>DOB</strong></label>
+                        </div>
+                        <div class="col-9">
+                            <input type="date" class="form-control" ng-model="user_details.dob"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label><strong>Contact</strong></label>
+                        </div>
+                        <div class="col-9">
+                            <input type="text" class="form-control" ng-model="user_details.contact"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3">
+                            <label><strong>About</strong></label>
+                        </div>
+                        <div class="col-9">
+                            <input type="text" class="form-control" ng-model="user_details.about"/>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-lg btn-dark">Update</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>

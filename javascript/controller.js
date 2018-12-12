@@ -45,6 +45,21 @@ app.controller("logout_controller",function($scope,$state,$window){
 })
 /*
 *   ---------------------------------------------------------------------------------------------------------------
+*   USER APP CONTROLLER
+*/
+app.controller("userapp_controller",function($scope,$http,$rootScope,$state,$window){
+    $scope.user_details = {};
+    var headers = {headers:{ 'Authorization':  'Basic ' + btoa($window.localStorage.getItem("user_email") + ':' + $window.localStorage.getItem("user_password"))}};
+    var url = "http://localhost:8080/current_user";
+    $http.get(url,headers).then(function(response){
+        $scope.user_details = response.data;
+        $scope.user_details.dob = new Date(response.data.dob);
+    },function(error){
+        
+    });
+});
+/*
+*   ---------------------------------------------------------------------------------------------------------------
 *   WEATHER APP CONTROLLER
 */
 app.controller("weatherapp_controller",function($scope,$http,$rootScope,$state,$window){
